@@ -17,6 +17,7 @@ import src.java.constants.Constants;
 
 /**
  * Classe utilizzata per effettuare una chiamata Post
+ * 
  * @author MicheleGolino
  *
  */
@@ -51,7 +52,6 @@ public class PostCall {
 	 * 
 	 * @param withAuthorization true if you want call a post with authorization,
 	 *                          else false
-	 * @param isBearer          true if is an authentication with bearer
 	 * @param accessToken       for the authorization, null if withAuthorization is
 	 *                          false
 	 * @param endpoint          to send request
@@ -81,11 +81,12 @@ public class PostCall {
 		HttpPost oHttpAuthPost = new HttpPost(uri);
 		String jsonRequest = composeJson(request);
 		StringEntity entity = new StringEntity(jsonRequest);
-		oHttpAuthPost.addHeader(Constants.Header.HEADER_NAME_CONTENT_TYPE, Constants.Header.HEADER_VALUE_APPLICATION_JSON);
+		oHttpAuthPost.addHeader(Constants.Header.HEADER_NAME_CONTENT_TYPE,
+				Constants.Header.HEADER_VALUE_APPLICATION_JSON);
 
 		oHttpAuthPost.setEntity(entity);
 		final String log = String.format("HttpPost with endpoint %s and request: %s", endpoint, jsonRequest);
-		LOGGER.info(log);
+		LOGGER.fatal(log);
 		HttpResponse oHttpAuthResponse = oHttpClient.execute(oHttpAuthPost);
 		if (oHttpAuthResponse != null) {
 			int statusCode = oHttpAuthResponse.getStatusLine().getStatusCode();
@@ -99,8 +100,8 @@ public class PostCall {
 			if (oHttpAuthEntity != null) {
 				String sResponse = EntityUtils.toString(oHttpAuthEntity);
 				EntityUtils.consume(oHttpAuthEntity);
-				final String logz = String.format("Status code: %s%nResponse: %s", statusCode, sResponse);
-				LOGGER.info(logz);
+				final String logz = String.format("Status code: %s Response: %s", statusCode, sResponse);
+				LOGGER.fatal(logz);
 				return oGson.fromJson(sResponse, Map.class);
 			} else {
 				throw new Exception(EXCEPTION_TESTGEN);
@@ -133,12 +134,13 @@ public class PostCall {
 		HttpPost oHttpAuthPost = new HttpPost(uri);
 		String jsonRequest = composeJson(request);
 		StringEntity entity = new StringEntity(jsonRequest);
-		oHttpAuthPost.addHeader(Constants.Header.HEADER_NAME_CONTENT_TYPE, Constants.Header.HEADER_VALUE_APPLICATION_JSON);
+		oHttpAuthPost.addHeader(Constants.Header.HEADER_NAME_CONTENT_TYPE,
+				Constants.Header.HEADER_VALUE_APPLICATION_JSON);
 		oHttpAuthPost.addHeader(Constants.Header.HEADER_NAME_AUTHORIZATION, authValue);
 
 		oHttpAuthPost.setEntity(entity);
 		final String log = String.format("HttpPost with endpoint %s and request: %s", endpoint, jsonRequest);
-		LOGGER.info(log);
+		LOGGER.fatal(log);
 		HttpResponse oHttpAuthResponse = oHttpClient.execute(oHttpAuthPost);
 		if (oHttpAuthResponse != null) {
 			int statusCode = oHttpAuthResponse.getStatusLine().getStatusCode();
@@ -152,8 +154,8 @@ public class PostCall {
 			if (oHttpAuthEntity != null) {
 				String sResponse = EntityUtils.toString(oHttpAuthEntity);
 				EntityUtils.consume(oHttpAuthEntity);
-				final String logz = String.format("Status code: %s%nResponse: %s", statusCode, sResponse);
-				LOGGER.info(logz);
+				final String logz = String.format("Status code: %s Response: %s", statusCode, sResponse);
+				LOGGER.fatal(logz);
 				return oGson.fromJson(sResponse, Map.class);
 			} else {
 				throw new Exception(EXCEPTION_TESTGEN);
