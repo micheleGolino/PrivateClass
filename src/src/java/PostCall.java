@@ -75,7 +75,6 @@ public class PostCall {
 	 */
 	@SuppressWarnings("unchecked")
 	public static Map<String, String> post(String endpoint, Map<String, Object> request) throws Exception {
-		Gson oGson = new Gson();
 		CHttpClient oHttpClient = new CHttpClient();
 		String uri = endpoint;
 		HttpPost oHttpAuthPost = new HttpPost(uri);
@@ -102,7 +101,7 @@ public class PostCall {
 				EntityUtils.consume(oHttpAuthEntity);
 				final String logz = String.format("Status code: %s Response: %s", statusCode, sResponse);
 				LOGGER.fatal(logz);
-				return oGson.fromJson(sResponse, Map.class);
+				return new Gson().fromJson(sResponse, Map.class);
 			} else {
 				throw new Exception(EXCEPTION_TESTGEN);
 			}
