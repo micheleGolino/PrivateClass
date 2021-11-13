@@ -8,6 +8,7 @@ import java.util.Map;
 import org.apache.logging.log4j.Logger;
 
 import src.java.PostCall;
+import src.java.Utility;
 
 public class TestPostCall {
 
@@ -18,9 +19,8 @@ public class TestPostCall {
 	}
 	
 	public static void startTestCall() {
-		final Map<String, Object> map = generateTestMap();
 		try {
-			PostCall.post(false, null, ENDPOINT, map);
+			Utility.printMapStringObject(PostCall.post(false, null, ENDPOINT, generateTestMap()));
 		} catch (Exception e) {
 			LOGGER.fatal(String.format("Eccezione in startTestCall %s", e.getMessage()));
 		}
