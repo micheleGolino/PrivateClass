@@ -1,4 +1,4 @@
-package src.java;
+package java.http;
 
 import java.io.IOException;
 import java.security.KeyManagementException;

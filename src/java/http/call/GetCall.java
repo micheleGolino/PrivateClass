@@ -1,32 +1,31 @@
-package src.java;
+package java.http.call;
 
 import static org.apache.logging.log4j.LogManager.getLogger;
 
+import java.constants.Constants;
+import java.http.CHttpClient;
 import java.util.Map;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.util.EntityUtils;
 import org.apache.logging.log4j.Logger;
 
 import com.google.gson.Gson;
 
-import src.java.constants.Constants;
-
 /**
- * Classe utilizzata per effettuare una chiamata Post
+ * Classe utilizzata per effettuare una chiamata Get
  * 
  * @author MicheleGolino
  *
  */
-public class PostCall {
+public class GetCall {
 
-	private PostCall() {
+	private GetCall() {
 	}
 
-	private static final Logger LOGGER = getLogger(PostCall.class);
+	private static final Logger LOGGER = getLogger(GetCall.class);
 
 	private static final String EXCEPTION_TESTGEN = "Errore! TestGenVerify [authentication] HttpResponse is null";
 	private static final int OK = 200;
@@ -43,9 +42,9 @@ public class PostCall {
 	 * @return response json
 	 * @throws Exception
 	 */
-	public static Map<String, Object> post(boolean withAuthorization, boolean isBearer, String accessToken,
-			String endpoint, Map<String, Object> request) throws Exception {
-		return withAuthorization ? post(accessToken, endpoint, isBearer, request) : post(endpoint, request);
+	public static Map<String, String> get(boolean withAuthorization, boolean isBearer, String accessToken,
+			String endpoint) throws Exception {
+		return withAuthorization ? get(accessToken, endpoint, isBearer) : get(endpoint);
 	}
 
 	/**
@@ -59,9 +58,9 @@ public class PostCall {
 	 * @return response json
 	 * @throws Exception
 	 */
-	public static Map<String, Object> post(boolean withAuthorization, String accessToken, String endpoint,
-			Map<String, Object> request) throws Exception {
-		return withAuthorization ? post(accessToken, endpoint, false, request) : post(endpoint, request);
+	public static Map<String, String> get(boolean withAuthorization, String accessToken, String endpoint)
+			throws Exception {
+		return withAuthorization ? get(accessToken, endpoint, false) : get(endpoint);
 	}
 
 	/**
@@ -74,25 +73,21 @@ public class PostCall {
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
-	public static Map<String, Object> post(String endpoint, Map<String, Object> request) throws Exception {
+	public static Map<String, String> get(String endpoint) throws Exception {
 		CHttpClient oHttpClient = new CHttpClient();
 		String uri = endpoint;
-		HttpPost oHttpAuthPost = new HttpPost(uri);
-		String jsonRequest = composeJson(request);
-		StringEntity entity = new StringEntity(jsonRequest);
-		oHttpAuthPost.addHeader(Constants.Header.HEADER_NAME_CONTENT_TYPE,
-				Constants.Header.HEADER_VALUE_APPLICATION_JSON);
+		HttpGet oHttpAuthGet = new HttpGet(uri);
 
-		oHttpAuthPost.setEntity(entity);
-		final String log = String.format("HttpPost with endpoint %s and request: %s", endpoint, jsonRequest);
+		final String log = String.format("HttpGet with endpoint %s", endpoint);
 		LOGGER.fatal(log);
-		HttpResponse oHttpAuthResponse = oHttpClient.execute(oHttpAuthPost);
+		HttpResponse oHttpAuthResponse = oHttpClient.execute(oHttpAuthGet);
+
 		if (oHttpAuthResponse != null) {
 			int statusCode = oHttpAuthResponse.getStatusLine().getStatusCode();
 			final String reason = oHttpAuthResponse.getStatusLine().getReasonPhrase();
 			if (statusCode != OK) {
-				final String exception = String
-						.format("Errore! Chiamata Post in errore StatusCode: %s ReasonPhrase: %s", statusCode, reason);
+				final String exception = String.format("Errore! Chiamata Get in errore StatusCode: %s ReasonPhrase: %s",
+						statusCode, reason);
 				throw new Exception(exception);
 			}
 			HttpEntity oHttpAuthEntity = oHttpAuthResponse.getEntity();
@@ -120,8 +115,7 @@ public class PostCall {
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
-	private static Map<String, Object> post(String accessToken, String endpoint, boolean isBearer,
-			Map<String, Object> request) throws Exception {
+	private static Map<String, String> get(String accessToken, String endpoint, boolean isBearer) throws Exception {
 		Gson oGson = new Gson();
 		CHttpClient oHttpClient = new CHttpClient();
 		String accToken = accessToken;
@@ -130,23 +124,18 @@ public class PostCall {
 		if (isBearer)
 			authValue = "Bearer ";
 		authValue += accToken;
-		HttpPost oHttpAuthPost = new HttpPost(uri);
-		String jsonRequest = composeJson(request);
-		StringEntity entity = new StringEntity(jsonRequest);
-		oHttpAuthPost.addHeader(Constants.Header.HEADER_NAME_CONTENT_TYPE,
-				Constants.Header.HEADER_VALUE_APPLICATION_JSON);
-		oHttpAuthPost.addHeader(Constants.Header.HEADER_NAME_AUTHORIZATION, authValue);
+		HttpGet oHttpAuthGet = new HttpGet(uri);
+		oHttpAuthGet.addHeader(Constants.Header.HEADER_NAME_AUTHORIZATION, authValue);
 
-		oHttpAuthPost.setEntity(entity);
-		final String log = String.format("HttpPost with endpoint %s and request: %s", endpoint, jsonRequest);
+		final String log = String.format("HttpGet with endpoint %s", endpoint);
 		LOGGER.fatal(log);
-		HttpResponse oHttpAuthResponse = oHttpClient.execute(oHttpAuthPost);
+		HttpResponse oHttpAuthResponse = oHttpClient.execute(oHttpAuthGet);
 		if (oHttpAuthResponse != null) {
 			int statusCode = oHttpAuthResponse.getStatusLine().getStatusCode();
 			final String reason = oHttpAuthResponse.getStatusLine().getReasonPhrase();
 			if (statusCode != OK) {
-				final String exception = String
-						.format("Errore! Chiamata Post in errore StatusCode: %s ReasonPhrase: %s", statusCode, reason);
+				final String exception = String.format("Errore! Chiamata Get in errore StatusCode: %s ReasonPhrase: %s",
+						statusCode, reason);
 				throw new Exception(exception);
 			}
 			HttpEntity oHttpAuthEntity = oHttpAuthResponse.getEntity();
@@ -162,10 +151,6 @@ public class PostCall {
 		} else {
 			throw new Exception(EXCEPTION_TESTGEN);
 		}
-	}
-
-	private static String composeJson(Map<String, Object> request) {
-		return new Gson().toJson(request);
 	}
 
 }

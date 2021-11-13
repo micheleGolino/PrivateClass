@@ -1,7 +1,6 @@
-package src.main.java;
+package java.main;
 
-import src.main.test.TestGetCall;
-import src.main.test.TestPostCall;
+import java.test.TestPostCall;
 
 public class Main {
 
