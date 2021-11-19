@@ -1,13 +1,14 @@
-package java.test;
+package jrs.test;
 
 import static org.apache.logging.log4j.LogManager.getLogger;
 
-import java.http.call.PostCall;
 import java.util.HashMap;
 import java.util.Map;
-import java.utility.Utility;
 
 import org.apache.logging.log4j.Logger;
+
+import jrs.http.call.PostCall;
+import jrs.utility.Utility;
 
 public class TestPostCall {
 

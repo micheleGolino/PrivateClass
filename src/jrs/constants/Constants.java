@@ -1,4 +1,4 @@
-package java.constants;
+package jrs.constants;
 
 /**
  * Classi di costanti

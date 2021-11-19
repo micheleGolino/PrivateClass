@@ -1,12 +1,13 @@
-package java.test;
+package jrs.test;
 
 import static org.apache.logging.log4j.LogManager.getLogger;
 
-import java.http.call.GetCall;
 import java.util.Map;
-import java.utility.Utility;
 
 import org.apache.logging.log4j.Logger;
+
+import jrs.http.call.GetCall;
+import jrs.utility.Utility;
 
 public class TestGetCall {
 

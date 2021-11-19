@@ -1,9 +1,7 @@
-package java.http.call;
+package jrs.http.call;
 
 import static org.apache.logging.log4j.LogManager.getLogger;
 
-import java.constants.Constants;
-import java.http.CHttpClient;
 import java.util.Map;
 
 import org.apache.http.HttpEntity;
@@ -14,8 +12,11 @@ import org.apache.logging.log4j.Logger;
 
 import com.google.gson.Gson;
 
+import jrs.constants.Constants;
+import jrs.http.CHttpClient;
+
 /**
- * Classe utilizzata per effettuare una chiamata Get
+ * Classe utilizzata per effettuare una chiamata <b>GET</b>
  * 
  * @author MicheleGolino
  *
@@ -31,15 +32,16 @@ public class GetCall {
 	private static final int OK = 200;
 
 	/**
+	 * Chiamata <b>GET</b> con un'autorizzazione d'accesso
 	 * 
-	 * @param withAuthorization true if you want call a post with authorization,
-	 *                          else false
-	 * @param isBearer          true if is an authentication with bearer
-	 * @param accessToken       for the authorization, null if withAutorization is
-	 *                          flase
-	 * @param endpoint          to send request
-	 * @param request           to send
-	 * @return response json
+	 * @param withAuthorization impostare a true se si sta effettaundo una chiamata
+	 *                          con un'autorizzazione, false altrimenti
+	 * @param isBearer          impostare a true se è un'autenticazione con bearer
+	 * @param accessToken       per l'autorizzazione, null se
+	 *                          <b>withAuthorization</b> è false
+	 * @param endpoint          a cui fare richiesta
+	 * @param request           da inviare
+	 * @return response risposta della chiamata in formato <b>JSON</b>
 	 * @throws Exception
 	 */
 	public static Map<String, String> get(boolean withAuthorization, boolean isBearer, String accessToken,
@@ -48,14 +50,15 @@ public class GetCall {
 	}
 
 	/**
+	 * Chiamata <b>GET</b> con un'autorizzazione d'accesso
 	 * 
-	 * @param withAuthorization true if you want call a post with authorization,
-	 *                          else false
-	 * @param accessToken       for the authorization, null if withAuthorization is
-	 *                          false
-	 * @param endpoint          to send request
-	 * @param request           to send
-	 * @return response json
+	 * @param withAuthorization impostare a true se si sta effettaundo una chiamata
+	 *                          con un'autorizzazione, false altrimenti
+	 * @param accessToken       per l'autorizzazione, null se <b>
+	 *                          withAuthorization</b> è false
+	 * @param endpoint          a cui fare richiesta
+	 * @param request           da inviare
+	 * @return response risposta della chiamata in formato <b>JSON</b>
 	 * @throws Exception
 	 */
 	public static Map<String, String> get(boolean withAuthorization, String accessToken, String endpoint)
@@ -64,12 +67,12 @@ public class GetCall {
 	}
 
 	/**
-	 * Default call the method post with header Content-type application/json No
-	 * authentication
+	 * Chiamata POST di default con Header <b>Content-type application/json</b> No
+	 * autenticazione
 	 * 
-	 * @param endpoint to send request
-	 * @param request  to send
-	 * @return response json
+	 * @param endpoint a cui inviare la request
+	 * @param request  da inviare
+	 * @return response risposta della chiamata in formato <b>JSON</b>
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
@@ -88,7 +91,7 @@ public class GetCall {
 			if (statusCode != OK) {
 				final String exception = String.format("Errore! Chiamata Get in errore StatusCode: %s ReasonPhrase: %s",
 						statusCode, reason);
-				throw new Exception(exception);
+				throw new IllegalArgumentException(exception);
 			}
 			HttpEntity oHttpAuthEntity = oHttpAuthResponse.getEntity();
 			if (oHttpAuthEntity != null) {
@@ -98,20 +101,23 @@ public class GetCall {
 				LOGGER.fatal(logz);
 				return new Gson().fromJson(sResponse, Map.class);
 			} else {
-				throw new Exception(EXCEPTION_TESTGEN);
+				throw new IllegalArgumentException(EXCEPTION_TESTGEN);
 			}
 		} else {
-			throw new Exception(EXCEPTION_TESTGEN);
+			throw new IllegalArgumentException(EXCEPTION_TESTGEN);
 		}
 	}
 
 	/**
+	 * Chiamata <b>GET</b> un'autorizzazione d'accesso
 	 * 
-	 * @param accessToken
-	 * @param endpoint
-	 * @param isBearer
-	 * @param request
-	 * @return
+	 * @param accessToken per l'autorizzazione, null se <b> withAuthorization</b> è
+	 *                    false
+	 * @param endpoint    a cui fare richiesta
+	 * @param request     da inviare
+	 * @return response risposta in formato <b>JSON</b>
+	 * 
+	 * @param isBearer impostare a true se è un'autenticazione con bearer
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
@@ -136,7 +142,7 @@ public class GetCall {
 			if (statusCode != OK) {
 				final String exception = String.format("Errore! Chiamata Get in errore StatusCode: %s ReasonPhrase: %s",
 						statusCode, reason);
-				throw new Exception(exception);
+				throw new IllegalArgumentException(exception);
 			}
 			HttpEntity oHttpAuthEntity = oHttpAuthResponse.getEntity();
 			if (oHttpAuthEntity != null) {
@@ -146,10 +152,10 @@ public class GetCall {
 				LOGGER.fatal(logz);
 				return oGson.fromJson(sResponse, Map.class);
 			} else {
-				throw new Exception(EXCEPTION_TESTGEN);
+				throw new IllegalArgumentException(EXCEPTION_TESTGEN);
 			}
 		} else {
-			throw new Exception(EXCEPTION_TESTGEN);
+			throw new IllegalArgumentException(EXCEPTION_TESTGEN);
 		}
 	}
 
